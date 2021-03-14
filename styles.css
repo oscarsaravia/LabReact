@@ -1,0 +1,78 @@
+@import url("https://fonts.googleapis.com/css2?family=Anton&display=swap");
+.empty {
+  width: 15px;
+  height: 15px;
+  background-color: black;
+}
+
+.wall {
+  width: 15px;
+  height: 15px;
+  background-color: #151de4;
+}
+
+.goal {
+  width: 15px;
+  height: 15px;
+  background-color: green;
+}
+
+.player {
+  height: 15px;
+  width: 15px;
+}
+
+.rowStyles {
+  display: flex;
+}
+
+/*CSS DEL MENU PRINCIPAL*/
+
+.titulo {
+  color: white;
+  font-size: 50px;
+  font-family: "Anton", sans-serif;
+  font-weight: 400;
+  text-align: center;
+}
+.subtitulo {
+  color: white;
+  font-size: 30px;
+  font-family: "Anton", sans-serif;
+  font-weight: 400;
+  text-align: center;
+}
+
+.botones {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button {
+  height: 70px;
+  width: 150px;
+  margin-left: 15px;
+  background-color: purple;
+  border: solid black 3px;
+  font-family: "Anton", sans-serif;
+  font-size: 15px;
+  color: white;
+}
+
+.foot {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  bottom: 0;
+  right: 50%;
+  transform: translate(50%, -50%);
+  font-family: "Anton", sans-serif;
+  font-size: 30px;
+  color: white;
+}
+
+.dif {
+  color: crimson;
+}

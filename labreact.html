@@ -1,0 +1,232 @@
+<html>
+  <head>
+    <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body style="background-color: black">
+    <div id="root"></div>
+
+    <script type="text/babel">
+      const htmlRoot = document.getElementById("root");
+
+      const Empty = () => {
+        return <div className="empty" />;
+      };
+
+      const Wall = () => {
+        return <div className="wall" />;
+      };
+
+      const Goal = () => {
+        return <div className="goal" />;
+      };
+
+      const Player = ({ angle }) => {
+        const style = {
+          transform: `rotate(${angle}deg)`,
+        };
+        return (
+          <div>
+            <img
+              src="pacman.png"
+              alt="pacman"
+              className="player"
+              style={style}
+            />
+          </div>
+        );
+      };
+
+      const Maze = () => {
+        const [mazeData, setMazeData] = React.useState([]);
+        const [playerAngle, setPlayerAngle] = React.useState(0);
+        const [menu, setMenu] = React.useState(1);
+        const [dificulty, setDificulty] = React.useState(5);
+        let movimientos = 0;
+
+        function foo(dificultad) {
+          setMenu(2);
+          setDificulty(dificultad);
+        }
+
+        const MainMenu = () => {
+          return (
+            <div>
+              <h1 className="titulo">
+                LABORATORIO REACT | <span className="dif">MAZE</span>
+              </h1>
+              <h2 className="subtitulo">ELIGE LA DIFICULTAD</h2>
+              <div className="botones">
+                <button
+                  onClick={() => {
+                    foo(5);
+                  }}
+                >
+                  FACIL
+                </button>
+                <button
+                  onClick={() => {
+                    foo(10);
+                  }}
+                >
+                  MEDIO
+                </button>
+                <button
+                  onClick={() => {
+                    foo(15);
+                  }}
+                >
+                  DIFICIL
+                </button>
+              </div>
+              <footer>
+                <p className="foot">Elaborado por Oscar Saravia</p>
+              </footer>
+            </div>
+          );
+        };
+
+        React.useEffect(() => {
+          fetch(
+            "http://ubeje.xyz:3001/?type=json&w=" +
+              dificulty +
+              "&h=" +
+              dificulty
+          )
+            .then((r) => r.json())
+            .then((r) => setMazeData(r));
+          console.log("render");
+        }, []);
+
+        const handleKeyDown = (event) => {
+          let temporalMaze = [...mazeData];
+          if (event.key === "ArrowRight") {
+            let verify = false;
+            for (var i = 0; i < temporalMaze.length; i++) {
+              for (var j = 0; j < temporalMaze[i].length; j++) {
+                if (temporalMaze[i][j] === "p") {
+                  if (temporalMaze[i][j + 1] === " " && verify === false) {
+                    ++movimientos;
+                    console.log(movimientos);
+                    setPlayerAngle(0);
+                    setPlayerAngle(0);
+                    temporalMaze[i][j] = " ";
+                    temporalMaze[i][j + 1] = "p";
+                    verify = true;
+                  } else if (
+                    temporalMaze[i][j + 1] === "g" &&
+                    verify === false
+                  ) {
+                    setPlayerAngle(0);
+                    setPlayerAngle(0);
+                    temporalMaze[i][j] = " ";
+                    temporalMaze[i][j + 1] = "p";
+                    verify = true;
+                    setMenu(3);
+                  }
+                }
+              }
+            }
+            setMazeData(temporalMaze);
+          }
+          if (event.key === "ArrowLeft") {
+            let verify = false;
+            for (var i = 0; i < temporalMaze.length; i++) {
+              for (var j = 0; j < temporalMaze[i].length; j++) {
+                if (temporalMaze[i][j] === "p") {
+                  if (temporalMaze[i][j - 1] === " " && verify === false) {
+                    movimientos = movimientos + 1;
+                    setPlayerAngle(-180);
+                    temporalMaze[i][j] = " ";
+                    temporalMaze[i][j - 1] = "p";
+                    verify = true;
+                  }
+                }
+              }
+            }
+            setMazeData(temporalMaze);
+          }
+          if (event.key === "ArrowUp") {
+            let verify = false;
+            for (var i = 0; i < temporalMaze.length; i++) {
+              for (var j = 0; j < temporalMaze[i].length; j++) {
+                if (temporalMaze[i][j] === "p") {
+                  if (temporalMaze[i - 1][j] === " " && verify === false) {
+                    movimientos = movimientos + 1;
+                    setPlayerAngle(-90);
+                    temporalMaze[i][j] = " ";
+                    temporalMaze[i - 1][j] = "p";
+                    verify = true;
+                  }
+                }
+              }
+            }
+            setMazeData(temporalMaze);
+          }
+          if (event.key === "ArrowDown") {
+            let verify = false;
+            for (var i = 0; i < temporalMaze.length; i++) {
+              for (var j = 0; j < temporalMaze[i].length; j++) {
+                if (temporalMaze[i][j] === "p") {
+                  if (temporalMaze[i + 1][j] === " " && verify === false) {
+                    movimientos = movimientos + 1;
+                    setPlayerAngle(90);
+                    temporalMaze[i][j] = " ";
+                    temporalMaze[i + 1][j] = "p";
+                    verify = true;
+                  } else if (
+                    temporalMaze[i + 1][j] === "g" &&
+                    verify === false
+                  ) {
+                    setPlayerAngle(90);
+                    temporalMaze[i][j] = " ";
+                    temporalMaze[i + 1][j] = "p";
+                    verify = true;
+                    setMenu(3);
+                  }
+                }
+              }
+            }
+            setMazeData(temporalMaze);
+          }
+        };
+        if (menu === 2) {
+          return (
+            <div tabIndex="0" onKeyDown={handleKeyDown}>
+              {mazeData.map((row) => {
+                return (
+                  <div className="rowstyles">
+                    {row.map((cell) => {
+                      switch (cell) {
+                        case "p":
+                          return <Player angle={playerAngle} />;
+                        case "g":
+                          return <Goal />;
+                        case " ":
+                          return <Empty />;
+                        default:
+                          return <Wall />;
+                      }
+                    })}
+                  </div>
+                );
+              })}
+            </div>
+          );
+        } else if (menu === 1) {
+          return (
+            <div>
+              <MainMenu />
+            </div>
+          );
+        } else if (menu === 3) {
+          return <h1 className="titulo">FIN DEL JUEGO{movimientos}</h1>;
+        }
+      };
+
+      ReactDOM.render(<Maze />, htmlRoot);
+    </script>
+  </body>
+</html>
